@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public enum Plat
 {
@@ -9,27 +10,44 @@ public enum Plat
     PLAT_WALL=2
 }
 
-
+[SerializeField]
 public class Vertex
 {
+    [SerializeField]
     public Plat plat;
+    [SerializeField]
     public bool isVisted;
+    [SerializeField]
     public Vertex(Plat plat)
     {
         this.plat = plat;
     }
 }
-
-public class Map_muis
+[SerializeField]
+public class Map_muis: ScriptableObject
 {
+    [SerializeField]
     public int Number;
+    [SerializeField]
     public GameObject[] platform;
-    
-    public Map_muis(int num)
+    [SerializeField]
+    public Vertex[] data;
+    [SerializeField]
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="table"></param>
+    public void Anynaz(GameObject table,int num)
     {
-        Number = num;
         
+        Number = num;
+        for (int i = 0; i < Number; i++)
+        {
+            data[i] = new Vertex(Plat.PLAT_NORMAL);
+            platform[i] = GameObject.Instantiate(table);
+        }
     }
+    
 }
 
 
@@ -76,10 +94,12 @@ public class Graph
 
 public class Map : MonoBehaviour
 {
-    public 
+    public Map_muis map_;
+    public GameObject table;
     // Start is called before the first frame update
     void Start()
     {
+        map_.Anynaz(table, 4);
         
     }
 
@@ -87,5 +107,11 @@ public class Map : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public Map_muis Load()
+    {
+        Map_muis _Muis = Resources.Load("sdada") as Map_muis;
+        return _Muis;
     }
 }
